@@ -10,9 +10,6 @@ while True:
     except ValueError:
         print("Пожалуйста, введите число (например, 21).")
 
-login = input("Придумайте логин: ").strip().lower()
-password = input("Придумайте пароль: ").strip().lower()
-
 if age < 18:
     print(
         "Внимание! Регистрация на нашем сервисе доступна только "
@@ -20,6 +17,26 @@ if age < 18:
     )
 
     raise SystemExit  # выходим, чтобы дальше код не выполнялся
+
+# ------Более логичная регистрация--------
+while True:
+
+    login = input("Придумайте логин: ").strip().lower()
+    if len(login) < 8:
+        print("Логин должен содержать не менее 8 символов.")
+    else:
+        print("Успешно!")
+        break
+
+
+while True:
+    password = input("Придумайте пароль: ").strip().lower()
+    if len(password) < 8:
+        print("Пароль должен содержать не менее 8 символов.")
+    else:
+        print("Успешно!")
+        break
+
 
 print(f"\nДобро пожаловать, {name.title()}! Регистрация успешно пройдена!")
 print("\nМашины, доступные для аренды: ")
@@ -59,7 +76,16 @@ for car, details in cars.items():
     print(f'Количество машин доступных для аренды: {details["available"]}.')
 
 # ----- Выбор машины -----
-user_data = input("\nКакую машину вы хотите взять на прокат? ").strip().lower()
+user_data = (
+    input(
+        "\nКакую машину вы хотите взять на прокат? (Введите " "'quit', чтобы выйти.) "
+    )
+    .strip()
+    .lower()
+)
+# Выход из приложения
+if user_data == "quit":
+    exit("До скорой встречи! :)")
 
 while True:  # Заказ машины
 
@@ -112,9 +138,12 @@ while True:
     grade = int(
         input(
             '\nПожалуйста, поставьте оценку нашему сервису "CarshDrive"'
-            ", где 1 - плохо, 5 - хорошо: "
+            ", где 1 - плохо, 5 - хорошо: (Введите 'quit', чтобы выйти) "
         )
     )
+
+    if grade == "quit":
+        exit("До скорой встречи! :)")
 
     try:
 
