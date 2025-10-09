@@ -66,14 +66,16 @@ cars = {
 }
 
 # Вывод списка машин для аренды
-for car, details in cars.items():
-    full_details = (
-        f'\nМарка машины: {car.title()} \nМодель: {details["model"]} '
-        f'{details["year"]} \nХарактеристики: {details["power"]}'
-    )
-    print(full_details)
-    print(f'Цена: {details["price"]} руб.')
-    print(f'Количество машин доступных для аренды: {details["available"]}.')
+def show_info_cars(cars):
+    for car, details in cars.items():
+        full_details = (
+            f'\nМарка машины: {car.title()} \nМодель: {details["model"]} '
+            f'{details["year"]} \nХарактеристики: {details["power"]}'
+            f'\nЦена: {details["price"]} руб'
+            f'\nКоличество машин доступных для аренды: {details["available"]}.'
+        )
+        print(full_details)
+show_info_cars(cars)
 
 # ----- Выбор машины -----
 user_data = (
@@ -132,31 +134,45 @@ while True:  # Заказ машины
 
         user_data = input("Попробуйте выбрать другую машину: ").lower()
 
-# ----- Оценка сервиса -----
-while True:
 
-    grade = int(
-        input(
+# ----- Оценка сервиса -----
+def get_service_grade():
+    # Функция запрашивает у пользователя оценку сервиса от 1 до 5.
+    #     Если пользователь вводит 'quit', программа завершает работу.
+
+    while True:
+
+        user_input = input(
             '\nПожалуйста, поставьте оценку нашему сервису "CarshDrive"'
             ", где 1 - плохо, 5 - хорошо: (Введите 'quit', чтобы выйти) "
         )
-    )
 
-    if grade == "quit":
-        exit("До скорой встречи! :)")
+        if user_input.lower() == "quit":
+            print("До скорой встречи! :)")
+            return None
 
-    try:
+        try:
 
-        if grade in [1, 2]:
-            print("\nМне очень жаль, что мы не оправдали ваших ожиданий :(")
-            break
+            grade = int(user_input)
 
-        elif grade in [3, 4, 5]:
-            print("\nБлагодарю за отзыв! Ваше мнение помогает нам стать лучше.")
-            break
+            if grade in [1, 2]:
+                print("\nМне очень жаль, что мы не оправдали ваших ожиданий :(")
+                return grade
 
-        else:
-            print("Пожалуйста, введите оценку от 1 до 5.")
+            elif grade in [3, 4, 5]:
+                print("\nБлагодарю за отзыв! Ваше мнение помогает нам стать лучше.")
+                return grade
 
-    except ValueError:
-        print("Пожалуйста, введите число (например, 5).")
+            else:
+                print("Пожалуйста, введите оценку от 1 до 5.")
+
+        except ValueError:
+            print("Пожалуйста, введите число (например, 5).")
+
+
+user_grade = get_service_grade()
+
+if user_grade is not None:
+    print("Ваша оценка:", user_grade)
+else:
+    print("Вы вышли без оценки.")
