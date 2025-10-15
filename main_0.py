@@ -1,45 +1,69 @@
+from pyfiglet import Figlet
+
+f = Figlet(font="slant")
+
+ascii_art = f.renderText("CarshDrive")
+
+print(ascii_art)
+
+
+###########################Начало программы###################################
 print('Добро пожаловать в "CarshDrive", пожалуйста, пройдите регистрацию!')
 
 name = input("\nКак вас зовут? - ")
 
-# Безопасный ввод возраста
-while True:
-    try:
-        age = int(input("Укажите ваш возраст? - ").strip())
-        break
-    except ValueError:
-        print("Пожалуйста, введите число (например, 21).")
-
-if age < 18:
-    print(
-        "Внимание! Регистрация на нашем сервисе доступна только "
-        "после исполнения совершеннолетнего возраста."
-    )
-
-    raise SystemExit  # выходим, чтобы дальше код не выполнялся
-
-# ------Более логичная регистрация--------
-while True:
-
-    login = input("Придумайте логин: ").strip().lower()
-    if len(login) < 8:
-        print("Логин должен содержать не менее 8 символов.")
-    else:
-        print("Успешно!")
-        break
+########################Безопасный ввод возраста##############################
 
 
-while True:
-    password = input("Придумайте пароль: ").strip().lower()
-    if len(password) < 8:
-        print("Пароль должен содержать не менее 8 символов.")
-    else:
-        print("Успешно!")
-        break
+def age_verification():
+
+    while True:
+        try:
+            age = int(input("\nУкажите ваш возраст? - ").strip())
+            break
+        except ValueError:
+            print("Пожалуйста, введите число (например, 21).")
+
+    if age < 18:
+        print(
+            "\nВнимание! Регистрация на нашем сервисе доступна только "
+            "после исполнения совершеннолетнего возраста."
+        )
+
+        raise SystemExit  # выходим, чтобы дальше код не выполнялся
 
 
-print(f"\nДобро пожаловать, {name.title()}! Регистрация успешно пройдена!")
-print("\nМашины, доступные для аренды: ")
+age_verification()
+
+
+#######################Более логичная регистрация##############################
+
+
+def registration():
+
+    while True:
+
+        login = input("\nПридумайте логин: ").strip().lower()
+        if len(login) < 8:
+            print("\nЛогин должен содержать не менее 8 символов.")
+        else:
+            print("\nУспешно!")
+            break
+
+    while True:
+        password = input("\nПридумайте пароль: ").strip().lower()
+        if len(password) < 8:
+            print("Пароль должен содержать не менее 8 символов.")
+        else:
+            print("\nУспешно!")
+            break
+
+    print(f"\nДобро пожаловать, {name.title()}! Регистрация успешно пройдена!")
+    print("\nМашины, доступные для аренды: ")
+
+
+registration()
+
 
 cars = {
     "bmw": {
@@ -65,7 +89,8 @@ cars = {
     },
 }
 
-# Вывод списка машин для аренды
+
+#############################Вывод списка машин для аренды####################
 def show_info_cars(cars):
     for car, details in cars.items():
         full_details = (
@@ -75,67 +100,77 @@ def show_info_cars(cars):
             f'\nКоличество машин доступных для аренды: {details["available"]}.'
         )
         print(full_details)
+
+
 show_info_cars(cars)
 
-# ----- Выбор машины -----
-user_data = (
-    input(
-        "\nКакую машину вы хотите взять на прокат? (Введите " "'quit', чтобы выйти.) "
-    )
-    .strip()
-    .lower()
-)
-# Выход из приложения
-if user_data == "quit":
-    exit("До скорой встречи! :)")
 
-while True:  # Заказ машины
+############################Заказ Машины######################################
+def rent_cars():
+    while True:
 
-    if user_data in cars:
-        if cars[user_data]["available"] > 0:
-            print(
-                f'\nОтличный выбор! Ваша {cars[user_data]["model"]} ожидает вас в нашем центре!'
+        user_data = (
+            input(
+                "\nКакую машину вы хотите взять на прокат? (Введите "
+                "'quit', чтобы выйти.) "
             )
-            # уменьшаем доступное количество
-            cars[user_data]["available"] -= 1
-
-            while True:
-
-                try:
-                    days = int(
-                        input(
-                            "\nНа сколько дней берёте? (0 — пропустить расчёт): "
-                        ).strip()
-                    )
-                    if days < 0:
-                        print("Количество дней не может быть отрицательным.")
-                        continue
-                    if days > 0:
-                        total = cars[user_data]["price"] * days
-                        print(f"Итоговая стоимость за {days} дн.: {total} руб.")
-                    break
-                except ValueError:
-                    print("Введите целое число (например, 3).")
-            break
-
-        else:
-            print("К сожалению, эта модель закончилась.")
-            user_data = (
-                input("Попробуйте выбрать другую машину (bmw/mercedes/toyota): ")
-                .strip()
-                .lower()
-            )
-
-    else:
-        print(
-            "К сожалению, такой машины у нас ещё нет, но мы обязательно "
-            "учтём ваши предпочтения!"
+            .strip()
+            .lower()
         )
 
-        user_data = input("Попробуйте выбрать другую машину: ").lower()
+        if user_data == "quit":
+            exit("До скорой встречи! :)")
+
+        if user_data in cars:
+            if cars[user_data]["available"] > 0:
+                print(
+                    f'\nОтличный выбор! Ваша {cars[user_data]["model"]} ожидает вас в нашем центре!'
+                )
+                # уменьшаем доступное количество
+                cars[user_data]["available"] -= 1
+
+                while True:
+
+                    try:
+                        days = int(
+                            input(
+                                "\nНа сколько дней берёте? (0 — пропустить расчёт): "
+                            ).strip()
+                        )
+                        if days < 0:
+                            print("Количество дней не может быть отрицательным.")
+                            continue
+                        if days > 0:
+                            total = cars[user_data]["price"] * days
+                            print(f"Итоговая стоимость за {days} дн.: {total} руб.")
+                        break
+                    except ValueError:
+                        print("Введите целое число (например, 3).")
+                break
+
+            else:
+                print("К сожалению, эта модель закончилась.")
+                user_data = (
+                    input("Попробуйте выбрать другую машину (bmw/mercedes/toyota): ")
+                    .strip()
+                    .lower()
+                )
+                return user_data
+
+        else:
+            print(
+                "К сожалению, такой машины у нас ещё нет, но мы обязательно "
+                "учтём ваши предпочтения!"
+            )
+
+            user_data = input("Попробуйте выбрать другую машину: ").lower()
+            return user_data
 
 
-# ----- Оценка сервиса -----
+rent_cars()
+
+
+################################Оценка сервиса#################################
 def get_service_grade():
     # Функция запрашивает у пользователя оценку сервиса от 1 до 5.
     #     Если пользователь вводит 'quit', программа завершает работу.
@@ -148,7 +183,7 @@ def get_service_grade():
         )
 
         if user_input.lower() == "quit":
-            print("До скорой встречи! :)")
+            print("\nДо скорой встречи! :)")
             return None
 
         try:
@@ -173,6 +208,32 @@ def get_service_grade():
 user_grade = get_service_grade()
 
 if user_grade is not None:
-    print("Ваша оценка:", user_grade)
+    print("\nВаша оценка:", user_grade)
 else:
     print("Вы вышли без оценки.")
+
+########################Возможность арендовать ещё машины #####################
+
+
+def rent_car_two():
+    while True:
+
+        user = input(
+            '\nЖелаете ли вы арендовать ещё какую нибудь машину? "Да" или "Нет" (Введите "quit", чтобы выйти). - '
+        )
+
+        if user.lower() == "quit":
+            exit("До скорой встречи! :)")
+
+        elif user.lower() in ["да", "yes"]:
+            show_info_cars(cars)
+            rent_cars()
+
+        elif user.lower() in ["нет", "no"]:
+            exit("До скорой встречи! :)")
+
+        else:
+            print('\nПожалуйста, введите "Да" или "Нет".')
+
+
+rent_car_two()
