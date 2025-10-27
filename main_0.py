@@ -1,5 +1,9 @@
-from pyfiglet import Figlet
+# ===================== Импорты =====================
 
+from pyfiglet import Figlet
+from models.car import cars
+
+# ===================== Заголовок =====================
 f = Figlet(font="slant")
 
 ascii_art = f.renderText("CarshDrive")
@@ -64,68 +68,6 @@ def registration():
 
 registration()
 
-######################### Создаём класс машин ###################################
-class Car:
-    def __init__(self, name, model, year, power, price: int, available: int):
-        self.name = name
-        self.model = model
-        self.year = year
-        self.power = power
-        self.price = price
-        self.available = available
-        self.odometer_reading = 0
-
-    def show_info_car(self):
-        print(
-            f"\nИмя: {self.name} \nМодель: {self.model} \nГод выпуска: {self.year} "
-            f"\nМощность: {self.power} \nЦена: {self.price} "
-            f"\nКоличество доступных машин: {self.available}"
-        )
-
-    def read_odometer(self):
-        print(f"Пробег: {self.odometer_reading} км.")
-
-    def update_odometer(self, mileage):
-        self.odometer_reading = mileage
-
-
-class ElectricCar(Car):
-
-    def __init__(self, name, model, year, power, price: int, available: int):
-        super().__init__(name, model, year, power, price, available)
-
-
-######################### Создаём автопарк ###################################
-
-cars = {
-    "bmw": Car(
-        "BMW",
-        "BMW 3 Series",
-        "2018",
-        "2.0-литровый турбированный двигатель (255 л.с.)",
-        5000,
-        2,
-    ),
-    "mercedes": Car(
-        "Mercedes",
-        "Mercedes-AMG CLE 53",
-        "2024",
-        "3.0-литровый рядный 6-цилиндровый бензиновый двигатель (449 л.с.)",
-        10000,
-        3,
-    ),
-    "toyota": Car(
-        "Toyota",
-        "Toyota C-HR+ (EV)",
-        "2025",
-        "Электро, на платформе e-TNGA (343 л.с.)",
-        8500,
-        1,
-    ),
-    "tesla": ElectricCar(
-        "Tesla", "Model 3", "2017", "Long Range RWD Electro AT (225.0 кВт)", 8000, 1
-    ),
-}
 ######################### Вспомогательные функции #############################
 
 
@@ -138,10 +80,8 @@ def show_info_cars(cars_dict):
 
 
 def rent_cars(cars_dict):
-
-    show_info_cars(cars_dict)
-
     while True:
+        show_info_cars(cars_dict)
 
         user_data = (
             input(
@@ -153,53 +93,55 @@ def rent_cars(cars_dict):
         )
 
         if user_data == "quit":
-            exit("До скорой встречи! :)")
+            print("До скорой встречи! :)")
+            return None
 
-        if user_data in cars:
-            car = cars[user_data]
-
-            if car.available > 0:
-                print(f"\nОтличный выбор! Ваша {car.model} ожидает вас в нашем центре!")
-                # уменьшаем доступное количество
-                car.available -= 1
-
-                while True:
-
-                    try:
-                        days = int(
-                            input(
-                                "\nНа сколько дней берёте? (0 — пропустить расчёт): "
-                            ).strip()
-                        )
-                        if days < 0:
-                            print("Количество дней не может быть отрицательным.")
-                            continue
-                        if days > 0:
-                            total = car.price * days
-                            print(f"Итоговая стоимость за {days} дн.: {total} руб.")
-                        break
-                    except ValueError:
-                        print("Введите целое число (например, 3).")
-                break
-
-            else:
-                print("К сожалению, эта модель закончилась.")
-                user_data = (
-                    input("Попробуйте выбрать другую машину (bmw/mercedes/toyota): ")
-                    .strip()
-                    .lower()
-                )
-                return user_data
-
-        else:
+        if user_data not in cars_dict:
             print(
-                "К сожалению, такой машины у нас ещё нет, но мы обязательно "
-                "учтём ваши предпочтения!"
+                "К сожалению, такой машины у нас ещё нет, но мы обязательно учтём ваши предпочтения!"
             )
+            continue
 
-            user_data = input("Попробуйте выбрать другую машину: ").lower()
-            return user_data
+        car = cars_dict[user_data]
 
+        if car.available <= 0:
+            print("\nК сожалению, эта модель закончилась.")
+            print("\nВыберите другую модель из списка.")
+            continue
+
+        print(f'\nОтличный выбор! Ваша {car.model} ожидает вас в нашем центре!')
+        car.available -= 1
+
+        while True:
+
+            try:
+                days = int(
+                    input(
+                        "\nНа сколько дней берёте? (0 — пропустить расчёт): "
+                    ).strip()
+                )
+                if days < 0:
+                    print("Количество дней не может быть отрицательным.")
+                    continue
+                if days > 0:
+                    total = car.price * days
+                    print(f"Итоговая стоимость за {days} дн.: {total} руб.")
+                break
+            except ValueError:
+                print("Введите целое число (например, 3).")
+
+
+        while True:
+            again = input(
+                '\nХотите арендовать ещё одну машину? (да/нет) ').strip().lower()
+            if again in ("да", "yes", "y"):
+                # цикл внешней функции повторится
+                break
+            elif again in ("нет", "no", "n"):
+                print("\nСпасибо! Возвращаемся в главное меню.")
+                return None
+            else:
+                print('\nПожалуйста, введите "да" или "нет".')
 
 rent_cars(cars)
 
@@ -260,7 +202,6 @@ def rent_car_two():
             exit("До скорой встречи! :)")
 
         elif user.lower() in ["да", "yes"]:
-            show_info_cars(cars)
             rent_cars(cars)
 
         elif user.lower() in ["нет", "no"]:
