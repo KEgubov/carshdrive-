@@ -64,49 +64,83 @@ def registration():
 
 registration()
 
+######################### Создаём класс машин ###################################
+class Car:
+    def __init__(self, name, model, year, power, price: int, available: int):
+        self.name = name
+        self.model = model
+        self.year = year
+        self.power = power
+        self.price = price
+        self.available = available
+        self.odometer_reading = 0
+
+    def show_info_car(self):
+        print(
+            f"\nИмя: {self.name} \nМодель: {self.model} \nГод выпуска: {self.year} "
+            f"\nМощность: {self.power} \nЦена: {self.price} "
+            f"\nКоличество доступных машин: {self.available}"
+        )
+
+    def read_odometer(self):
+        print(f"Пробег: {self.odometer_reading} км.")
+
+    def update_odometer(self, mileage):
+        self.odometer_reading = mileage
+
+
+class ElectricCar(Car):
+
+    def __init__(self, name, model, year, power, price: int, available: int):
+        super().__init__(name, model, year, power, price, available)
+
+
+######################### Создаём автопарк ###################################
 
 cars = {
-    "bmw": {
-        "model": "BMW 3 Series",
-        "year": 2018,
-        "power": "2.0-литровый турбированный двигатель (255 л.с.)",
-        "price": 5000,
-        "available": 2,
-    },
-    "mercedes": {
-        "model": "Mercedes-AMG CLE 53",
-        "year": 2024,
-        "power": "3.0-литровый рядный 6-цилиндровый бензиновый двигатель (449 л.с.)",
-        "price": 10000,
-        "available": 3,
-    },
-    "toyota": {
-        "model": "Toyota C-HR+ (EV)",
-        "year": 2025,
-        "power": "Электро, на платформе e-TNGA (343 л.с.)",
-        "price": 8500,
-        "available": 1,
-    },
+    "bmw": Car(
+        "BMW",
+        "BMW 3 Series",
+        "2018",
+        "2.0-литровый турбированный двигатель (255 л.с.)",
+        5000,
+        2,
+    ),
+    "mercedes": Car(
+        "Mercedes",
+        "Mercedes-AMG CLE 53",
+        "2024",
+        "3.0-литровый рядный 6-цилиндровый бензиновый двигатель (449 л.с.)",
+        10000,
+        3,
+    ),
+    "toyota": Car(
+        "Toyota",
+        "Toyota C-HR+ (EV)",
+        "2025",
+        "Электро, на платформе e-TNGA (343 л.с.)",
+        8500,
+        1,
+    ),
+    "tesla": ElectricCar(
+        "Tesla", "Model 3", "2017", "Long Range RWD Electro AT (225.0 кВт)", 8000, 1
+    ),
 }
+######################### Вспомогательные функции #############################
 
 
-#############################Вывод списка машин для аренды####################
-def show_info_cars(cars):
-    for car, details in cars.items():
-        full_details = (
-            f'\nМарка машины: {car.title()} \nМодель: {details["model"]} '
-            f'{details["year"]} \nХарактеристики: {details["power"]}'
-            f'\nЦена: {details["price"]} руб'
-            f'\nКоличество машин доступных для аренды: {details["available"]}.'
-        )
-        print(full_details)
+def show_info_cars(cars_dict):
+    for car in cars_dict.values():
+        car.show_info_car()
 
 
-show_info_cars(cars)
+######################### Логика аренды #####################################
 
 
-############################Заказ Машины######################################
-def rent_cars():
+def rent_cars(cars_dict):
+
+    show_info_cars(cars_dict)
+
     while True:
 
         user_data = (
@@ -122,12 +156,12 @@ def rent_cars():
             exit("До скорой встречи! :)")
 
         if user_data in cars:
-            if cars[user_data]["available"] > 0:
-                print(
-                    f'\nОтличный выбор! Ваша {cars[user_data]["model"]} ожидает вас в нашем центре!'
-                )
+            car = cars[user_data]
+
+            if car.available > 0:
+                print(f"\nОтличный выбор! Ваша {car.model} ожидает вас в нашем центре!")
                 # уменьшаем доступное количество
-                cars[user_data]["available"] -= 1
+                car.available -= 1
 
                 while True:
 
@@ -141,7 +175,7 @@ def rent_cars():
                             print("Количество дней не может быть отрицательным.")
                             continue
                         if days > 0:
-                            total = cars[user_data]["price"] * days
+                            total = car.price * days
                             print(f"Итоговая стоимость за {days} дн.: {total} руб.")
                         break
                     except ValueError:
@@ -167,7 +201,7 @@ def rent_cars():
             return user_data
 
 
-rent_cars()
+rent_cars(cars)
 
 
 ################################Оценка сервиса#################################
@@ -227,7 +261,7 @@ def rent_car_two():
 
         elif user.lower() in ["да", "yes"]:
             show_info_cars(cars)
-            rent_cars()
+            rent_cars(cars)
 
         elif user.lower() in ["нет", "no"]:
             exit("До скорой встречи! :)")
