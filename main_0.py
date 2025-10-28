@@ -1,6 +1,7 @@
 # ===================== Импорты =====================
 
 from pyfiglet import Figlet
+from models.registration import Registration
 from models.car import cars
 
 # ===================== Заголовок =====================
@@ -14,59 +15,13 @@ print(ascii_art)
 ###########################Начало программы###################################
 print('Добро пожаловать в "CarshDrive", пожалуйста, пройдите регистрацию!')
 
-name = input("\nКак вас зовут? - ")
 
-########################Безопасный ввод возраста##############################
-
-
-def age_verification():
-
-    while True:
-        try:
-            age = int(input("\nУкажите ваш возраст? - ").strip())
-            break
-        except ValueError:
-            print("Пожалуйста, введите число (например, 21).")
-
-    if age < 18:
-        print(
-            "\nВнимание! Регистрация на нашем сервисе доступна только "
-            "после исполнения совершеннолетнего возраста."
-        )
-
-        raise SystemExit  # выходим, чтобы дальше код не выполнялся
-
-
-age_verification()
-
-
-#######################Более логичная регистрация##############################
-
-
-def registration():
-
-    while True:
-
-        login = input("\nПридумайте логин: ").strip().lower()
-        if len(login) < 8:
-            print("\nЛогин должен содержать не менее 8 символов.")
-        else:
-            print("\nУспешно!")
-            break
-
-    while True:
-        password = input("\nПридумайте пароль: ").strip().lower()
-        if len(password) < 8:
-            print("Пароль должен содержать не менее 8 символов.")
-        else:
-            print("\nУспешно!")
-            break
-
-    print(f"\nДобро пожаловать, {name.title()}! Регистрация успешно пройдена!")
-    print("\nМашины, доступные для аренды: ")
-
-
-registration()
+###########################Регистрация пользователя###########################
+registration = Registration("", 0, "", "")
+registration.user_name()
+registration.age_verification()
+registration.set_login()
+registration.set_password()
 
 ######################### Вспомогательные функции #############################
 
