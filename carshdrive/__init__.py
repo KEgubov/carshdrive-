@@ -1,0 +1,5 @@
+"""CarshDrive - консольное приложение для аренды автомобилей"""
+__version__ = "0.1.0"
+__author__ = "KEgubov"
+__status__ = "Development"
+__email__ = "kirilegubov@gmail.com"

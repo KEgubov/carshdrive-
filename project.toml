@@ -1,0 +1,19 @@
+[project]
+name = "carshdrive"
+version = "0.1.0"
+description = "Учебный консольный проект для аренды автомобилей"
+authors = [
+    { name = "Kirill Egubov", email = "kirilegubov@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pyfiglet>=0.8.post0"
+]
+
+[project.scripts]
+carshdrive = "carshdrive.main:main"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"

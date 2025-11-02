@@ -1,7 +1,9 @@
+from carshdrive.models.car import cars
+########################Вывод списка машин ####################################
 def show_info_cars(cars_dict):
     for car in cars_dict.values():
         car.show_info_car()
-
+#########################Логика аренды машин##################################
 def rent_cars(cars_dict):
     while True:
         show_info_cars(cars_dict)
@@ -65,3 +67,23 @@ def rent_cars(cars_dict):
                 return None
             else:
                 print('\nПожалуйста, введите "да" или "нет".')
+
+########################Возможность арендовать ещё машины #####################
+def rent_car_two():
+    while True:
+
+        user = input(
+            '\nЖелаете ли вы арендовать ещё какую нибудь машину? "Да" или "Нет" (Введите "quit", чтобы выйти). - '
+        )
+
+        if user.lower() == "quit":
+            exit("До скорой встречи! :)")
+
+        elif user.lower() in ["да", "yes"]:
+            rent_cars(cars)
+
+        elif user.lower() in ["нет", "no"]:
+            exit("До скорой встречи! :)")
+
+        else:
+            print('\nПожалуйста, введите "Да" или "Нет".')
