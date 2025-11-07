@@ -2,6 +2,7 @@
 
 from pyfiglet import Figlet
 from carshdrive.services.registration import Registration
+from carshdrive.models.user import User
 from carshdrive.models.car import cars
 from carshdrive.services.rent_cars import rent_cars, rent_car_two
 from carshdrive.services.service_grade import get_service_grade
@@ -23,6 +24,16 @@ def main():
     registration.age_verification()
     registration.set_login()
     registration.set_password()
+
+    # Создаём User, передавая данные из registration
+    user = User(
+        registration.name,
+        registration.age,
+        registration.login,
+        registration.password
+    )
+
+    user.save_to_json()
     # =========== Вывод машин и логика аренды ============
     print("\nСписок машин доступных для аренды:")
     rent_cars(cars)
